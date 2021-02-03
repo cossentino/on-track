@@ -1,17 +1,26 @@
 class SessionsController < ApplicationController
 
+  def landing
+    if logged_in?
+      redirect_to "/users/#{session[:user_id]}/dashboard"
+    else
+      @user = User.new
+    end
+  end
 
-  def create
-    binding.pry
-    # We're going to save the authentication information in the session
-    # for demonstration purposes. We want to keep this data somewhere so that,
-    # after redirect, we have access to the returned data
-    session[:email] = request.env['omniauth.auth']['info']['email']
-    session[:image] = request.env['omniauth.auth']['info']['image']
-    # session[:omniauth_data] = request.env['omniauth.auth']
+  def oauth
     # binding.pry
 
-    # Ye olde redirect
+    # capture email and image from google
+    session[:email] = request.env['omniauth.auth']['info']['email']
+    session[:image] = request.env['omniauth.auth']['info']['image']
+
+    # find or create by email
+
+    user = User.new(from_social: true)
+    session[:user_id]
+    # session[:omniauth_data] = request.env['omniauth.auth']
+    # binding.pry
     redirect_to root_path
   end
 
@@ -30,7 +39,7 @@ class SessionsController < ApplicationController
 
 
   def logout
-    session.clear
+    reset_session
     redirect_to root_path
   end
 
