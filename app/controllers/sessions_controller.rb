@@ -17,7 +17,6 @@ class SessionsController < ApplicationController
 
 
   def login
-    raise params.inspect
     user = User.find_by(email: params[:user][:email])
     if user && User.authenticate
       session[:user_id] = user.id
