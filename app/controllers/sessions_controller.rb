@@ -1,7 +1,7 @@
 class SessionsController < ApplicationController
 
   def landing
-    if logged_in?
+    if current_user
       redirect_to "/users/#{session[:user_id]}/dashboard"
     else
       @user = User.new
@@ -17,8 +17,8 @@ class SessionsController < ApplicationController
 
     # find or create by email
 
-    user = User.new(from_social: true)
-    session[:user_id]
+    user = User.find_or_create_by(email: session[:email], from_social: true)
+    session[:user_id] = user.id
     # session[:omniauth_data] = request.env['omniauth.auth']
     # binding.pry
     redirect_to root_path
