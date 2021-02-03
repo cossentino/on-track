@@ -2,7 +2,7 @@ class SessionsController < ApplicationController
 
 
   def create
-
+    binding.pry
     # We're going to save the authentication information in the session
     # for demonstration purposes. We want to keep this data somewhere so that,
     # after redirect, we have access to the returned data
@@ -18,11 +18,13 @@ class SessionsController < ApplicationController
 
   def login
     user = User.find_by(email: params[:user][:email])
-    if user && User.authenticate
+    if user && user.authenticate(params[:user][:password])
       session[:user_id] = user.id
       redirect_to root_path
     else
-      redirect_to '/sessions/failure'
+      flash[:alert] = 'failure test'
+      @user = User.new
+      render :'welcome/landing'
     end
   end
 

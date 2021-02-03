@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   resources :users
   match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   post '/login', to: 'sessions#login'
+  get '/logout', to: 'sessions#logout'
+  get '/sessions/failure', to: 'sessions#failure'
 
   root 'welcome#landing'
 
