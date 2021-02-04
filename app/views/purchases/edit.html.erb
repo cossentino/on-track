@@ -2,4 +2,4 @@
 
 <h1>Edit an existing purchase</h1>
 
-<%= render partial: "form", locals: {purchase: @purchase } %>
+<%= render partial: "form", locals: {purchase: @purchase, url: edit_user_purchase_path(@user, @purchase) } %>

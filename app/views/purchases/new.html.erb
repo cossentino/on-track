@@ -2,4 +2,4 @@
 <h1>Add a new purchase</h1>
 
 
-<%= render partial: "form", locals: {purchase: @purchase } %>
+<%= render partial: "form", locals: {purchase: @purchase, url: user_purchases_path(@user) } %>

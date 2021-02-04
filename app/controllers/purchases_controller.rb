@@ -10,10 +10,12 @@ class PurchasesController < ApplicationController
   end
 
   def new
+    @user = current_user
     @purchase = Purchase.new
   end
 
   def edit
+    @user = current_user
     @purchase = Purchase.find_by_id(params[:id])
   end
 

@@ -1,0 +1,13 @@
+
+
+
+
+<%= form_for @user do |f| %>
+  <%= @user.email %>
+  <%= f.label "First Name" %>
+  <%= f.text_field :first_name %>
+  <%= f.label "Last Name" %>
+  <%= f.text_field :last_name %>
+  <%= f.label "Monthly Income" %>
+  <%= f.text_field :income %>
+<% end %>

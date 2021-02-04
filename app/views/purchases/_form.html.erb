@@ -1,7 +1,7 @@
 
 
 
-<%= form_for purchase do |f| %>
+<%= form_for purchase, url: url do |f| %>
   <%= f.label "Store/Place of Purchase:" %>
   <%= f.text_field :place %>
   <%= f.label "Date:" %>
