@@ -8,23 +8,6 @@ class SessionsController < ApplicationController
     end
   end
 
-  def oauth
-    user = User.new.tap do |u|
-       u.from_social = true
-       u.email = request.env['omniauth.auth']['info']['email']
-       u.save
-    end
-    if user.save
-      session[:user_id] = user.id
-      session[:image] = request.env['omniauth.auth']['info']['image']
-      redirect_to root_path
-    else
-      flash[:alert] = 'failure test'
-      @user = User.new
-      render :'sessions/landing'
-    end
-  end
-
   def login
     user = User.find_by(email: params[:user][:email])
     if user && user.authenticate(params[:user][:password])
@@ -37,6 +20,34 @@ class SessionsController < ApplicationController
     end
   end
 
+  def signup
+    user = User.new(user_params)
+    if user.save
+      session[:user_id] = user.id
+      redirect_to root_path
+    else
+      flash[:alert] = "Could not create account, please try again"
+      redirect_to '/'
+    end
+  end
+
+  def oauth
+    oauth_email = request.env['omniauth.auth']['info']['email']
+    ## if user exists in database, ensure that it is also from social
+    if user = User.find_by(email: oauth_email)
+      if user.from_social != true
+        flash[:alert] = 'Email is already associated with an account. Please try again'
+        redirect_to '/'
+      else
+        login_from_social(user)
+      end
+    ## if not duplicate and not existing social user, create user from social
+    else
+      create_from_social(oauth_email)
+    end
+  end
+
+
   def logout
     reset_session
     redirect_to root_path
@@ -44,6 +55,29 @@ class SessionsController < ApplicationController
 
   def failure
   end
+
+  private
+
+
+    def login_from_social(user)
+      session[:user_id] = user.id
+      session[:image] = request.env['omniauth.auth']['info']['image']
+      redirect_to root_path
+    end
+
+    def create_from_social(email)
+      user = User.new.tap do |u|
+        u.from_social = true
+        u.email = email
+      end
+      if user.save
+        login_from_social(user)
+        redirect_to root_path
+      else
+        flash[:alert] = 'Unable to create Account. Please try again'
+        redirect_to '/'
+      end
+    end
 
 
 
