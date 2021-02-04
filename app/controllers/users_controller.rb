@@ -1,13 +1,9 @@
 class UsersController < ApplicationController
 
     def dashboard
+        @user = current_user
+        view_or_redirect(:dashboard, :'/sessions/landing')
     end
 
-    def create
-        user = User.new(user_params)
-    end
-
-    #want to create new user without password when coming from oauth
-    def create_from_oauth
 
 end

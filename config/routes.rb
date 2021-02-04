@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   post '/login', to: 'sessions#login'
   get '/logout', to: 'sessions#logout'
   get '/sessions/failure', to: 'sessions#failure'
+  get '/dashboard', to: 'users#dashboard'
 
   root 'sessions#landing'
 

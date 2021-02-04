@@ -5,7 +5,6 @@ class User < ApplicationRecord
     has_many :purchases
     has_many :categories, through: :purchases
     belongs_to :family, optional: true
-    attr_accessor :from_social
     
     def from_social?
         self.from_social == true
