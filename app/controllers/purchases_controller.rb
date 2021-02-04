@@ -20,7 +20,7 @@ class PurchasesController < ApplicationController
   def destroy
     @purchase = Purchase.find_by_id(params[:id])
     @purchase.destroy
-    redirect_to purchases_path
+    redirect_to user_purchases_path
   end
 
 

@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
   # Add your routes here
 
-  resources :purchases
-  resources :users
+  
+  resources :users do
+    resources :purchases
+  end
   match '/auth/:provider/callback', to: 'sessions#oauth', via: [:get, :post]
   post '/login', to: 'sessions#login'
   get '/logout', to: 'sessions#logout'
