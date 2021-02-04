@@ -19,10 +19,20 @@ class UsersController < ApplicationController
       end
     end
 
+    def update
+      user = User.find_by_id(current_user.id)
+      if user.update(user_params)
+        redirect_to root_path
+      else
+        flash[:alert] = "Error"
+        render :edit
+      end
+    end
+
     private
 
       def user_params
-          params.require(:user).permit(:email, :password)
+          params.require(:user).permit(:email, :income, :password)
       end
   
 

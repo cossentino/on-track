@@ -1,7 +1,7 @@
 class PurchasesController < ApplicationController
 
   def index
-    @purchases = Purchase.find_by(user_id: current_user.id)
+    @purchases = Purchase.where(user_id: current_user.id)
   end
   
   
