@@ -1,4 +1,14 @@
-<h1>Test test</h1>
 
-<h1><%= session[:email] %></h1>
+<%= flash[:alert] if flash[:alert] %>
+<h1><%= @user.email %></h1>
 <img src=<%= session[:image] %>>
+
+<h1>Dashboard</h1>
+
+<p>Hello. Here are your expenses for this month. </p>
+
+
+
+
+
+

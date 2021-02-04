@@ -21,29 +21,23 @@ class SessionsController < ApplicationController
   end
 
   def signup
-    user = User.new(user_params)
-    if user.save
-      session[:user_id] = user.id
-      redirect_to root_path
-    else
-      flash[:alert] = "Could not create account, please try again"
-      redirect_to '/'
-    end
+    @user = User.new
   end
 
   def oauth
+    binding.pry
     oauth_email = request.env['omniauth.auth']['info']['email']
     ## if user exists in database, ensure that it is also from social
     if user = User.find_by(email: oauth_email)
       if user.from_social != true
         flash[:alert] = 'Email is already associated with an account. Please try again'
-        redirect_to '/'
+        redirect_to root_path
       else
         login_from_social(user)
       end
     ## if not duplicate and not existing social user, create user from social
     else
-      create_from_social(oauth_email)
+      create_from_social
     end
   end
 
@@ -65,10 +59,12 @@ class SessionsController < ApplicationController
       redirect_to root_path
     end
 
-    def create_from_social(email)
+    def create_from_social
       user = User.new.tap do |u|
         u.from_social = true
-        u.email = email
+        u.email = request.env['omniauth.auth']['info']['email']
+        u.first_name = request.env['omniauth.auth']['info']['first_name']
+        u.last_name = request.env['omniauth.auth']['info']['last_name']
       end
       if user.save
         login_from_social(user)
